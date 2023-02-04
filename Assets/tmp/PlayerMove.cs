@@ -14,6 +14,9 @@ public class PlayerMove : MonoBehaviour
     private Vector2 moveInput;
 	private Rigidbody rb;
 
+	[SerializeField]
+	private Generator rootGen;
+
 	private void Start()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -40,5 +43,10 @@ public class PlayerMove : MonoBehaviour
 	void OnMove(InputValue value)
 	{
 		moveInput = value.Get<Vector2>();
+	}
+
+	void OnFire(InputValue value)
+	{
+		rootGen.GrowRoots();
 	}
 }

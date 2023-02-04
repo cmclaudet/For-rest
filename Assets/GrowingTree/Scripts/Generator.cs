@@ -84,6 +84,9 @@ public class Generator : MonoBehaviour {
 	MeshFilter _filter;
 
 
+	public bool IsGrowing = false;
+
+
 	void Awake () {
 		// initilization 
 	}
@@ -132,10 +135,10 @@ public class Generator : MonoBehaviour {
 
 	// Start is called before the first frame update
 	void Start () {
-		GrowRoots();
+		//GrowRoots();
   }
 
-	void GrowRoots()
+	public void GrowRoots()
 	{
         GenerateAttractors(_nbAttractors, _radius);
 
@@ -145,123 +148,129 @@ public class Generator : MonoBehaviour {
         _firstBranch = new Branch(_startPosition, _startPosition + new Vector3(0, _branchLength, 0), new Vector3(0, 1, 0));
         _branches.Add(_firstBranch);
         _extremities.Add(_firstBranch);
+
+		IsGrowing = !IsGrowing;
     }
 
   // Update is called once per frame
   void Update () {
-		_timeSinceLastIteration+= Time.deltaTime;
+		if (IsGrowing)
+		{
+			_timeSinceLastIteration+= Time.deltaTime;
 
-		// we check if we need to run a new iteration 
-		if (_timeSinceLastIteration > _timeBetweenIterations) {
-			_timeSinceLastIteration = 0f;
+			// we check if we need to run a new iteration 
+			if (_timeSinceLastIteration > _timeBetweenIterations) {
+				_timeSinceLastIteration = 0f;
 
-			// we parse the extremities to set them as grown 
-			foreach (Branch b in _extremities) {
-				b._grown = true;
-			}
-
-			// we remove the attractors in kill range
-			for (int i = _attractors.Count-1; i >= 0; i--) {
-				foreach (Branch b in _branches) {
-					if (Vector3.Distance(b._end, _attractors[i]) < _killRange) {
-						_attractors.Remove(_attractors[i]);
-						_nbAttractors--;
-						break;
-					}
-				}
-			}
-
-			if (_attractors.Count > 0) {
-				// we clear the active attractors
-				_activeAttractors.Clear();
-				foreach (Branch b in _branches) {
-					b._attractors.Clear();
+				// we parse the extremities to set them as grown 
+				foreach (Branch b in _extremities) {
+					b._grown = true;
 				}
 
-				// each attractor is associated to its closest branch, if in attraction range
-				int ia = 0;
-				foreach (Vector3 attractor in _attractors) {
-					float min = 999999f;
-					Branch closest = null; // will store the closest branch
+				// we remove the attractors in kill range
+				for (int i = _attractors.Count-1; i >= 0; i--) {
 					foreach (Branch b in _branches) {
-						float d = Vector3.Distance(b._end, attractor);
-						if (d < _attractionRange && d < min) {
-							min = d;
-							closest = b;
+						if (Vector3.Distance(b._end, _attractors[i]) < _killRange) {
+							_attractors.Remove(_attractors[i]);
+							_nbAttractors--;
+							break;
 						}
 					}
-
-					// if a branch has been found, we add the attractor to the branch
-					if (closest != null) {
-						closest._attractors.Add(attractor);
-						_activeAttractors.Add(ia);
-					}
-
-					ia++;
 				}
 
-				// if at least an attraction point has been found, we want our tree to grow towards it
-				if (_activeAttractors.Count != 0) {
-					// because new extremities will be set here, we clear the current ones
-					_extremities.Clear();
-
-					// new branches will be added here
-					List<Branch> newBranches = new List<Branch>();
-
+				if (_attractors.Count > 0) {
+					// we clear the active attractors
+					_activeAttractors.Clear();
 					foreach (Branch b in _branches) {
-						// if the branch has attraction points, we grow towards them
-						if (b._attractors.Count > 0) {
-							// we compute the direction of the new branch
-							Vector3 dir = new Vector3(0, 0, 0);
-							foreach (Vector3 attr in b._attractors) {
-								dir+= (attr - b._end).normalized;
-							}
-							dir/= b._attractors.Count;
-							// random growth
-							dir+= RandomGrowthVector();
-							dir.Normalize();
-
-							// our new branch grows in the correct direction
-							Branch nb = new Branch(b._end, b._end + dir * _branchLength, dir, b);
-							nb._distanceFromRoot = b._distanceFromRoot+1;
-							b._children.Add(nb);
-							newBranches.Add(nb);
-							_extremities.Add(nb);
-						} else {
-							// if no attraction points, we only check if the branch is an extremity
-							if (b._children.Count == 0) {
-								_extremities.Add(b);
-							}
-						}
+						b._attractors.Clear();
 					}
 
-					// we merge the new branches with the previous ones
-					_branches.AddRange(newBranches);
-				} else {
-					// we grow the extremities of the tree
-					for (int i = 0; i < _extremities.Count; i++) {
-						Branch e = _extremities[i];
-						// the new branch starts where the extremity ends
-						Vector3 start = e._end;
-						// we add randomness to the direction
-						Vector3 dir = e._direction + RandomGrowthVector();
-						// we add the direction multiplied by the branch length to get the end point
-						Vector3 end = e._end + dir * _branchLength;
-						// a new branch can be created with the same direction as its parent
-						Branch nb = new Branch(start, end, dir, e);
+					// each attractor is associated to its closest branch, if in attraction range
+					int ia = 0;
+					foreach (Vector3 attractor in _attractors) {
+						float min = 999999f;
+						Branch closest = null; // will store the closest branch
+						foreach (Branch b in _branches) {
+							float d = Vector3.Distance(b._end, attractor);
+							if (d < _attractionRange && d < min) {
+								min = d;
+								closest = b;
+							}
+						}
 
-						// the current extrimity has a new child
-						e._children.Add(nb);
+						// if a branch has been found, we add the attractor to the branch
+						if (closest != null) {
+							closest._attractors.Add(attractor);
+							_activeAttractors.Add(ia);
+						}
 
-						// let's add the new branch to the list and set it as the new extremity 
-						_branches.Add(nb);
-						_extremities[i] = nb;
+						ia++;
+					}
+
+					// if at least an attraction point has been found, we want our tree to grow towards it
+					if (_activeAttractors.Count != 0) {
+						// because new extremities will be set here, we clear the current ones
+						_extremities.Clear();
+
+						// new branches will be added here
+						List<Branch> newBranches = new List<Branch>();
+
+						foreach (Branch b in _branches) {
+							// if the branch has attraction points, we grow towards them
+							if (b._attractors.Count > 0) {
+								// we compute the direction of the new branch
+								Vector3 dir = new Vector3(0, 0, 0);
+								foreach (Vector3 attr in b._attractors) {
+									dir+= (attr - b._end).normalized;
+								}
+								dir/= b._attractors.Count;
+								// random growth
+								dir+= RandomGrowthVector();
+								dir.Normalize();
+
+								// our new branch grows in the correct direction
+								Branch nb = new Branch(b._end, b._end + dir * _branchLength, dir, b);
+								nb._distanceFromRoot = b._distanceFromRoot+1;
+								b._children.Add(nb);
+								newBranches.Add(nb);
+								_extremities.Add(nb);
+							} else {
+								// if no attraction points, we only check if the branch is an extremity
+								if (b._children.Count == 0) {
+									_extremities.Add(b);
+								}
+							}
+						}
+
+						// we merge the new branches with the previous ones
+						_branches.AddRange(newBranches);
+					} else {
+						// we grow the extremities of the tree
+						for (int i = 0; i < _extremities.Count; i++) {
+							Branch e = _extremities[i];
+							// the new branch starts where the extremity ends
+							Vector3 start = e._end;
+							// we add randomness to the direction
+							Vector3 dir = e._direction + RandomGrowthVector();
+							// we add the direction multiplied by the branch length to get the end point
+							Vector3 end = e._end + dir * _branchLength;
+							// a new branch can be created with the same direction as its parent
+							Branch nb = new Branch(start, end, dir, e);
+
+							// the current extrimity has a new child
+							e._children.Add(nb);
+
+							// let's add the new branch to the list and set it as the new extremity 
+							_branches.Add(nb);
+							_extremities[i] = nb;
+						}
 					}
 				}
 			}
+
+			ToMesh();
+
 		}
-
-		ToMesh();
   }
 
 	/**
