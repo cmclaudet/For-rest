@@ -19,6 +19,7 @@ public class PlayerMove : MonoBehaviour {
 	private Rigidbody rb;
 
 	[SerializeField]
+	private GameObject rootPrefab;
 	private Generator rootGen;
 
 	private void Start()
@@ -54,6 +55,15 @@ public class PlayerMove : MonoBehaviour {
 
 	void OnFire(InputValue value)
 	{
-		rootGen.GrowRoots();
+		if (rootGen != null)
+		{
+			rootGen.enabled = false;
+			rootGen = null;
+		}
+		else
+		{
+			rootGen = Instantiate(rootPrefab, transform.position, Quaternion.identity).GetComponent<Generator>();
+			rootGen.GrowRoots();
+		}
 	}
 }

@@ -38,11 +38,14 @@ public class Generator : MonoBehaviour {
 	[Header("Generation parameters")]
 	[Range(0, 3000)]
 	public int _nbAttractors = 400;
+	private int cnbAttr;
 	[Range(0f, 100f)]
 	public float _radius = 5f;
-	[SerializeField]
-	private Transform entPos;
-	public Vector3 _startPosition { get { return entPos.position; } } // = new Vector3(0, 0, 0);
+    [Range(0f, 100f)]
+    public float _addRadius = 5f;
+    //[SerializeField]
+    //private Transform entPos;
+    public Vector3 _startPosition { get { return transform.position; } }//entPos.position; } } // = new Vector3(0, 0, 0);
 	[Range(0f, 0.5f)]
 	public float _branchLength = 0.2f;
 	[Range(0f, 1f)]
@@ -85,6 +88,7 @@ public class Generator : MonoBehaviour {
 
 
 	public bool IsGrowing = false;
+	private float prevRad = 0f;
 
 
 	void Awake () {
@@ -95,7 +99,7 @@ public class Generator : MonoBehaviour {
 	 * Generates n attractors and stores them in the attractors array
 	 * The points are generated within a sphere of radius r using a random distribution
 	 **/
-	void GenerateAttractors (int n, float r) {
+	void GenerateAttractorSphere (int n, float r) {
 		for (int i = 0; i < n; i++) {
 			float radius = Random.Range(0f, 1f);
 			radius = Mathf.Pow(Mathf.Sin(radius * Mathf.PI/2f), 0.8f);
@@ -106,7 +110,7 @@ public class Generator : MonoBehaviour {
 
 			Vector3 pt = new Vector3(
 				radius * Mathf.Cos(theta) * Mathf.Sin(alpha),
-				0, //radius * Mathf.Sin(theta) * Mathf.Sin(alpha),
+				radius * Mathf.Sin(theta) * Mathf.Sin(alpha),
 				radius * Mathf.Cos(alpha)
 			);
 
@@ -117,10 +121,61 @@ public class Generator : MonoBehaviour {
 		}
 	}
 
-	/**
+	void GenerateAttractorRing(int n)
+	{
+        for (int i = 0; i < n; i++)
+        {
+			float theta = 2f * Mathf.PI * Random.Range(0f, 1f);
+
+            Vector3 pt = new Vector3(
+                Mathf.Cos(theta),
+                0, //radius * Mathf.Sin(theta) * Mathf.Sin(alpha),
+                Mathf.Sin(theta)
+            );
+
+			//scale vector to fall on ring of previos r to new r
+			pt = pt * Random.Range(prevRad, prevRad + _addRadius);
+
+            // translation to match the parent position
+            pt += transform.position;
+
+            _attractors.Add(pt);
+        }
+
+		prevRad = prevRad + _addRadius;
+    }
+
+	
+    void GenerateAttractorCircle(int n, float r)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            float radius = Random.Range(0f, 1f);
+            radius = Mathf.Pow(Mathf.Sin(radius * Mathf.PI / 2f), 0.8f);
+            radius *= r;
+            // 2 angles are generated from which a direction will be computed
+            float alpha = Random.Range(0f, Mathf.PI);
+            float theta = Random.Range(0f, Mathf.PI * 2f);
+
+            Vector3 pt = new Vector3(
+                radius * Mathf.Cos(theta) * Mathf.Sin(alpha),
+                0, //radius * Mathf.Sin(theta) * Mathf.Sin(alpha),
+                radius * Mathf.Cos(alpha)
+            );
+
+            // translation to match the parent position
+            pt += transform.position;
+
+            _attractors.Add(pt);
+        }
+
+		prevRad = r;
+    }
+
+    /**
 	 * Returns a 3D random vector of _randomGrowth magniture 
 	 **/
-	Vector3 RandomGrowthVector () {
+    Vector3 RandomGrowthVector () {
 		float alpha = Random.Range(0f, Mathf.PI);
 		float theta = Random.Range(0f, Mathf.PI*2f);
 
@@ -140,7 +195,8 @@ public class Generator : MonoBehaviour {
 
 	public void GrowRoots()
 	{
-        GenerateAttractors(_nbAttractors, _radius);
+		cnbAttr = _nbAttractors;
+        GenerateAttractorCircle(_nbAttractors, _radius);
 
         _filter = GetComponent<MeshFilter>();
 
@@ -270,6 +326,14 @@ public class Generator : MonoBehaviour {
 
 			ToMesh();
 
+			if (_attractors.Count < 4)
+			{
+				//IsGrowing = false;
+				_activeAttractors.Clear();
+				_attractors.Clear();
+				Debug.LogError("hi");
+				GenerateAttractorRing(cnbAttr);
+			}
 		}
   }
 

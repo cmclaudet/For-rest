@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22929132, g: 0.2555781, b: 0.23823118, a: 1}
+  m_IndirectSpecularColor: {r: 0.22953068, g: 0.25581405, b: 0.2383851, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -268,7 +268,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 10
   sprite: {fileID: 827873148}
-  rootGen: {fileID: 886961850}
+  animator: {fileID: 827873149}
+  rootPrefab: {fileID: 4555286255674639336, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
+    type: 3}
 --- !u!114 &281539459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1111,18 +1113,58 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &886961850 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4555286255674639333, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
-    type: 3}
-  m_PrefabInstance: {fileID: 4555286255334143327}
+--- !u!1 &1788736575
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1788736577}
+  - component: {fileID: 1788736576}
+  m_Layer: 0
+  m_Name: TreeDrawer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1788736576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788736575}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 524c27571c0f2ec47b3d7d568d52c4c7, type: 3}
+  m_Script: {fileID: 11500000, guid: dcd4362005bb3a94d92cfeb320749d25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _treeObject: {fileID: 0}
+  _leafObject: {fileID: 3763290345309979223, guid: 8fa950f2fce52d54e83da6638d26f4b6,
+    type: 3}
+  _rangeObject: {fileID: 0}
+  _killRangeObject: {fileID: 0}
+  _leaf: {fileID: 2100000, guid: 885e4d28ceb5fec46836f52e65a23e2c, type: 2}
+  _leafInactive: {fileID: 2100000, guid: b9cbf85c2fb402e46aedefef5e8ccf8a, type: 2}
+  _attractionRange: {fileID: 2100000, guid: 03f6248c53e653643b7604f7b280bb63, type: 2}
+--- !u!4 &1788736577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788736575}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4555286255334143327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1190,10 +1232,25 @@ PrefabInstance:
       propertyPath: entPos
       value: 
       objectReference: {fileID: 281539456}
+    - target: {fileID: 4555286255674639333, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
+        type: 3}
+      propertyPath: _radius
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555286255674639333, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
+        type: 3}
+      propertyPath: _nbAttractors
+      value: 590
+      objectReference: {fileID: 0}
     - target: {fileID: 4555286255674639336, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
         type: 3}
       propertyPath: m_Name
       value: Tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555286255674639336, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b674abfdfe1a4476b4cf22a4b518a06, type: 3}
