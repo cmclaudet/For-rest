@@ -120,12 +120,14 @@ public class PlayerMove : MonoBehaviour {
 						lastMoveInput = moveInput;
 						timeSinceLastDifferentInput = 0;
 						PlaySound(creakSounds);
+						ZoomInCamera();
 					} else {
 						timeSinceLastDifferentInput += Time.deltaTime;
 					}
 				} else {
 					lastMoveInput = moveInput;
 					PlaySound(creakSounds);
+					ZoomInCamera();
 					timeSinceLastDifferentInput = 0;
 				}
 			} else {
@@ -220,11 +222,17 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	private void ZoomOutCamera() {
+		if (zoomedOutVC.Priority > normalVC.Priority) {
+			return;
+		}
 		normalVC.Priority = 9;
 		zoomedOutVC.Priority = 10;
 	}
 
 	private void ZoomInCamera() {
+		if (normalVC.Priority > zoomedOutVC.Priority) {
+			return;
+		}
 		normalVC.Priority = 10;
 		zoomedOutVC.Priority = 9;
 	}
