@@ -40,6 +40,8 @@ public class PlayerMove : MonoBehaviour {
 	[SerializeField]
 	private AudioClip growRootsSound;
 
+	private AudioSource growRootsAudioSource;
+
 	[SerializeField]
 	private AudioClip breakSound;
 
@@ -162,7 +164,7 @@ public class PlayerMove : MonoBehaviour {
 		BreakFree();
 	}
 
-	private void PlaySound(params AudioClip[] audioClips) {
+	private AudioSource PlaySound(params AudioClip[] audioClips) {
 		AudioSource freeAudioSource = audioSources.FirstOrDefault(source => !source.isPlaying);
 		int randomSoundClipIndex = Random.Range(0, audioClips.Length);
 
@@ -170,6 +172,7 @@ public class PlayerMove : MonoBehaviour {
 			freeAudioSource.clip = audioClips[randomSoundClipIndex];
 			freeAudioSource.pitch = (Random.Range(0.6f, .9f));
 			freeAudioSource.Play();
+			return freeAudioSource;
 		}
 		else
 		{
@@ -180,11 +183,15 @@ public class PlayerMove : MonoBehaviour {
 			audioSource.pitch = (Random.Range(0.6f, .9f));
 			audioSource.Play();
 			audioSources.Add(audioSource);
+			return audioSource;
 		}
 	}
 
 	private void BreakFree() {
 		ZoomInCamera();
+		if (growRootsAudioSource != null && growRootsAudioSource.isPlaying) {
+			growRootsAudioSource.Stop();
+		}
 		PlaySound(breakSound);
 
 		lastMoveInput = Vector2.zero;
@@ -232,7 +239,10 @@ public class PlayerMove : MonoBehaviour {
 		} else {
 			rootGen = Instantiate(rootPrefab, transform.position, Quaternion.identity).GetComponent<Generator>();
 			rootGen.GrowRoots();
-			PlaySound(growRootsSound);
+			if (growRootsAudioSource == null || !growRootsAudioSource.isPlaying) {
+				growRootsAudioSource = PlaySound(growRootsSound);
+			}
+
 			ZoomOutCamera();
 		}
 	}
