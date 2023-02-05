@@ -103,6 +103,8 @@ public class Generator : MonoBehaviour {
 	private GameObject childPrefab;
 	[SerializeField]
 	private Vector3 crownOffset;
+	[SerializeField]
+	private int nbRingTrees;
 
     void Awake () {
 		// initilization 
@@ -212,7 +214,16 @@ public class Generator : MonoBehaviour {
 		if (isRoot)
 			GenerateAttractorCircle(_nbAttractors, _radius);
 		else
+		{
+			float radSize = Random.Range(2f, 6f);
+			Vector3 cOffset = new Vector3(Random.Range(0f, 1.5f), Random.Range(5f, 10f), Random.Range(0f, 1.5f));
+			float randGrow = Random.Range(1f, 2f);
+
+			_radius = radSize;
+			crownOffset = cOffset;
+			_randomGrowth = randGrow;
             GenerateAttractorSphere(_nbAttractors, _radius);
+		}
 
         _filter = GetComponent<MeshFilter>();
 
@@ -369,6 +380,7 @@ public class Generator : MonoBehaviour {
 			}
 		}
   }
+
 
 	/**
 	 * Creates a mesh from the branches list
