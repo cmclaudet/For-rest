@@ -40,6 +40,9 @@ public class PlayerMove : MonoBehaviour {
 	[SerializeField]
 	private AudioClip breakSound;
 
+	[SerializeField]
+	private AudioSource footstepsSound;
+
 	private List<AudioSource> audioSources = new List<AudioSource>();
 
   private Vector2 moveInput;
@@ -79,6 +82,7 @@ public class PlayerMove : MonoBehaviour {
 
 		Vector3 velocity = new Vector3(moveInput.x * walkSpeed, rb.velocity.y, moveInput.y * walkSpeed);
 		rb.velocity = transform.TransformDirection(velocity);
+		TryPlayFootstepsSound();
 
 		animator.SetBool(IsWalkingBool, isTryingToWalk);
 
@@ -96,6 +100,14 @@ public class PlayerMove : MonoBehaviour {
 		} else if (velocity.x > 0) {
         sprite.flipX = false;
     }
+	}
+
+	private void TryPlayFootstepsSound() {
+		if (moveInput.magnitude > 0.01f && !footstepsSound.isPlaying) {
+			footstepsSound.Play();
+		} else if (moveInput.magnitude < 0.01f && footstepsSound.isPlaying) {
+			footstepsSound.Stop();
+		}
 	}
 
 	void OnMove(InputValue value)
