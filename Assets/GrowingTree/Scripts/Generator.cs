@@ -95,7 +95,7 @@ public class Generator : MonoBehaviour {
 	private int cutoff = 5;
 	[SerializeField]
 	private bool isRoot;
-    [SerializeField][Range(0f, 1000f)]
+    [SerializeField][Range(0f, 5000f)]
     private float _childChance = 5f;
 	[SerializeField]
 	private List<Generator> childTrees = new List<Generator>();

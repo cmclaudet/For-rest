@@ -163,7 +163,7 @@ MonoBehaviour:
   extendedGrowth: 0
   cutoff: 6
   isRoot: 0
-  _childChance: 1000
+  _childChance: 1328
   childTrees: []
   childPrefab: {fileID: 1532259614706265540, guid: b5b77cc0176e84832b5f24e80e1ab813,
     type: 3}
@@ -188,7 +188,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fe5bad708d19a7048b14a5e9a38f7539, type: 2}
+  - {fileID: 2100000, guid: f24006f6153794851b8b627c1266b6cb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
