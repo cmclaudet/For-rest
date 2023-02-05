@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour {
-	private static readonly int IsWalkingTrigger = Animator.StringToHash("isWalking");
+	private static readonly int IsWalkingBool = Animator.StringToHash("isWalking");
+	private static readonly int MoveXInt = Animator.StringToHash("moveX");
+	private static readonly int MoveYInt = Animator.StringToHash("moveY");
 
 	[SerializeField]
 	private float walkSpeed = 10f;
@@ -38,7 +38,13 @@ public class PlayerMove : MonoBehaviour {
 		Vector3 velocity = new Vector3(moveInput.x * walkSpeed, rb.velocity.y, moveInput.y * walkSpeed);
 		rb.velocity = transform.TransformDirection(velocity);
 
-		animator.SetBool(IsWalkingTrigger, Mathf.Abs(moveInput.x) > 0.01f);
+		bool shouldWalk = moveInput.magnitude > 0.01f;
+		animator.SetBool(IsWalkingBool, shouldWalk);
+
+		if (shouldWalk) {
+			animator.SetFloat(MoveXInt, moveInput.x);
+			animator.SetFloat(MoveYInt, moveInput.y);
+		}
 
 		if (velocity.x < 0)
 		{
