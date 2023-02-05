@@ -168,6 +168,7 @@ MonoBehaviour:
   childPrefab: {fileID: 4555286255674639336, guid: 8d8df40db0f054fe8ba7ff90cf3b6b63,
     type: 3}
   crownOffset: {x: 0, y: 0, z: 0}
+  nbRingTrees: 0
 --- !u!23 &4555286255674639334
 MeshRenderer:
   m_ObjectHideFlags: 0

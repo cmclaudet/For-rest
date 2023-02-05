@@ -376,7 +376,8 @@ public class Generator : MonoBehaviour {
 				_attractors.Clear();
 				//Debug.LogError("hi");
 				if (extendedGrowth)
-					GenerateAttractorRing(cnbAttr);
+					StartCoroutine(GrowOut());
+						//GenerateAttractorRing(cnbAttr);
 			}
 		}
   }
@@ -519,4 +520,53 @@ public class Generator : MonoBehaviour {
 		}
 	}
 */
+
+    private List<Vector3> GenerateSeedRing(int n)
+    {
+		List<Vector3> tmp = new List<Vector3>();
+
+        for (int i = 0; i < n; i++)
+        {
+            float theta = 2f * Mathf.PI * Random.Range(0f, 1f);
+
+            Vector3 pt = new Vector3(
+                Mathf.Cos(theta),
+                0, //radius * Mathf.Sin(theta) * Mathf.Sin(alpha),
+                Mathf.Sin(theta)
+            );
+
+            //scale vector to fall on ring of previos r to new r
+            pt = pt * Random.Range(prevRad, prevRad + _addRadius);
+
+            // translation to match the parent position
+            pt += transform.position;
+
+			//_attractors.Add(pt);
+			tmp.Add(pt);
+        }
+
+        prevRad = prevRad + _addRadius;
+		return (tmp);
+    }
+
+    private IEnumerator GrowOut()
+	{
+		while (isRoot && IsGrowing)
+		{
+			yield return new WaitForSeconds(20f);
+
+			List<Vector3> tmp = GenerateSeedRing(Random.Range(0, 7));
+
+            foreach (var seed in tmp)
+			{
+				Debug.Log("a tree");
+                GameObject obj = Instantiate(childPrefab, seed, transform.rotation, transform);
+
+                Generator gen = obj.GetComponent<Generator>();
+                childTrees.Add(gen);
+                gen.GrowRoots();
+                yield return new WaitForSeconds(5f);
+			}
+		}
+    }
 }
