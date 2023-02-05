@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,12 @@ public class PlayerMove : MonoBehaviour {
 	private static readonly int IsWalkingBool = Animator.StringToHash("isWalking");
 	private static readonly int MoveXInt = Animator.StringToHash("moveX");
 	private static readonly int MoveYInt = Animator.StringToHash("moveY");
+
+	[SerializeField]
+	private CinemachineVirtualCamera normalVC;
+
+	[SerializeField]
+	private CinemachineVirtualCamera zoomedOutVC;
 
 	[SerializeField]
 	private float walkSpeed = 10f;
@@ -104,6 +111,7 @@ public class PlayerMove : MonoBehaviour {
 	IEnumerator TryBreakFree() {
 		float timeSinceBreakFree = 0;
 		float timeSinceLastDifferentInput = 0;
+		ZoomInCamera();
 
 		while (timeSinceBreakFree < wiggleTime) {
 			if (moveInput.magnitude > 0.01f) {
@@ -126,6 +134,7 @@ public class PlayerMove : MonoBehaviour {
 
 			if (timeSinceLastDifferentInput >= maxTimeTillNextInput) {
 				timeSinceBreakFree = 0;
+				ZoomOutCamera();
 			} else {
 				timeSinceBreakFree += Time.deltaTime;
 			}
@@ -158,6 +167,7 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	private void BreakFree() {
+		ZoomInCamera();
 		PlaySound(breakSound);
 
 		lastMoveInput = Vector2.zero;
@@ -200,11 +210,22 @@ public class PlayerMove : MonoBehaviour {
 	private void ToggleGrowRoots() {
 		if (rootGen != null) {
 			rootGen.Stop();
-            rootGen.enabled = false;
+      rootGen.enabled = false;
 			rootGen = null;
 		} else {
 			rootGen = Instantiate(rootPrefab, transform.position, Quaternion.identity).GetComponent<Generator>();
 			rootGen.GrowRoots();
+			ZoomOutCamera();
 		}
+	}
+
+	private void ZoomOutCamera() {
+		normalVC.Priority = 9;
+		zoomedOutVC.Priority = 10;
+	}
+
+	private void ZoomInCamera() {
+		normalVC.Priority = 10;
+		zoomedOutVC.Priority = 9;
 	}
 }
