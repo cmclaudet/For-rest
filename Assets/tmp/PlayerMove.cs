@@ -38,6 +38,9 @@ public class PlayerMove : MonoBehaviour {
 	private AudioClip[] creakSounds;
 
 	[SerializeField]
+	private AudioClip growRootsSound;
+
+	[SerializeField]
 	private AudioClip breakSound;
 
 	[SerializeField]
@@ -117,7 +120,7 @@ public class PlayerMove : MonoBehaviour {
 
 	void OnFire(InputValue value)
 	{
-		ToggleGrowRoots();
+		//ToggleGrowRoots();
 	}
 
 	IEnumerator TryBreakFree() {
@@ -229,6 +232,7 @@ public class PlayerMove : MonoBehaviour {
 		} else {
 			rootGen = Instantiate(rootPrefab, transform.position, Quaternion.identity).GetComponent<Generator>();
 			rootGen.GrowRoots();
+			PlaySound(growRootsSound);
 			ZoomOutCamera();
 		}
 	}
