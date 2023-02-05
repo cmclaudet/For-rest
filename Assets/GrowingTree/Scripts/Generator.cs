@@ -95,7 +95,7 @@ public class Generator : MonoBehaviour {
 	private int cutoff = 5;
 	[SerializeField]
 	private bool isRoot;
-    [SerializeField][Range(0f, 100f)]
+    [SerializeField][Range(0f, 1000f)]
     private float _childChance = 5f;
 	[SerializeField]
 	private List<Generator> childTrees = new List<Generator>();
@@ -308,11 +308,19 @@ public class Generator : MonoBehaviour {
 								_extremities.Add(nb);
 
 								//rarely add child tree
-								if ((_childChance / 100) >= Random.Range(0f, 100f) && isRoot)
+								if ((_childChance / 100) >= Random.Range(0f, 100f))
 								{
-									Generator gen = Instantiate(childPrefab, b._end, transform.rotation, transform).GetComponent<Generator>();
-									childTrees.Add(gen);
-									gen.GrowRoots();
+									GameObject obj = Instantiate(childPrefab, b._end, transform.rotation, transform);
+
+									if (obj.GetComponent<Generator>() != null)
+									{
+										Generator gen = obj.GetComponent<Generator>();
+										childTrees.Add(gen);
+										gen.GrowRoots();
+									}
+									else {
+										obj.transform.rotation = Random.rotation;
+									}
 								}
 							} else {
 								// if no attraction points, we only check if the branch is an extremity

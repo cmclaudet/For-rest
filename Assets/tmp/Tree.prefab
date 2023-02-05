@@ -163,9 +163,10 @@ MonoBehaviour:
   extendedGrowth: 0
   cutoff: 6
   isRoot: 0
-  _childChance: 0
+  _childChance: 1000
   childTrees: []
-  childPrefab: {fileID: 0}
+  childPrefab: {fileID: 1532259614706265540, guid: b5b77cc0176e84832b5f24e80e1ab813,
+    type: 3}
   crownOffset: {x: 0, y: 8, z: 0}
 --- !u!23 &4555286255674639334
 MeshRenderer:
