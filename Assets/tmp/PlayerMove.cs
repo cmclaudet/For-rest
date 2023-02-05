@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,6 +26,14 @@ public class PlayerMove : MonoBehaviour {
 
 	[SerializeField]
 	private float wiggleTime = 3f;
+
+	[SerializeField]
+	private AudioClip[] creakSounds;
+
+	[SerializeField]
+	private AudioClip breakSound;
+
+	private List<AudioSource> audioSources = new List<AudioSource>();
 
   private Vector2 moveInput;
 	private Rigidbody rb;
@@ -101,11 +111,13 @@ public class PlayerMove : MonoBehaviour {
 					if (IsDifferentDirection(lastMoveInput, moveInput)) {
 						lastMoveInput = moveInput;
 						timeSinceLastDifferentInput = 0;
+						PlaySound(creakSounds);
 					} else {
 						timeSinceLastDifferentInput += Time.deltaTime;
 					}
 				} else {
 					lastMoveInput = moveInput;
+					PlaySound(creakSounds);
 					timeSinceLastDifferentInput = 0;
 				}
 			} else {
@@ -124,7 +136,30 @@ public class PlayerMove : MonoBehaviour {
 		BreakFree();
 	}
 
+	private void PlaySound(params AudioClip[] audioClips) {
+		AudioSource freeAudioSource = audioSources.FirstOrDefault(source => !source.isPlaying);
+		int randomSoundClipIndex = Random.Range(0, audioClips.Length);
+
+		if (freeAudioSource != null) {
+			freeAudioSource.clip = audioClips[randomSoundClipIndex];
+			freeAudioSource.pitch = (Random.Range(0.6f, .9f));
+			freeAudioSource.Play();
+		}
+		else
+		{
+			GameObject newAudioSource = new GameObject("Audio Source");
+			AudioSource audioSource = newAudioSource.AddComponent<AudioSource>();
+			audioSource.playOnAwake = false;
+			audioSource.clip = audioClips[randomSoundClipIndex];
+			audioSource.pitch = (Random.Range(0.6f, .9f));
+			audioSource.Play();
+			audioSources.Add(audioSource);
+		}
+	}
+
 	private void BreakFree() {
+		PlaySound(breakSound);
+
 		lastMoveInput = Vector2.zero;
 		isPlayerRooted = false;
 		breakFree = null;

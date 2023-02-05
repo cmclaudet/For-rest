@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22953068, g: 0.25581405, b: 0.2383851, a: 1}
+  m_IndirectSpecularColor: {r: 0.22929132, g: 0.2555781, b: 0.23823118, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -267,8 +267,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 6
+  timeTillRootsGrow: 3
   sprite: {fileID: 827873148}
   animator: {fileID: 827873149}
+  maxTimeTillNextInput: 0.5
+  wiggleTime: 3
+  creakSounds:
+  - {fileID: 8300000, guid: 6db365e51481142c79a3ccb6c614de4f, type: 3}
+  breakSound: {fileID: 8300000, guid: 2cccffc6e1e124d60a15f6b9ffed5a6c, type: 3}
   rootPrefab: {fileID: 4555286255674639336, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
     type: 3}
 --- !u!114 &281539459
@@ -380,7 +386,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: -0.023461508, y: -0.0155725805, z: -0.00036550115, w: 0.9996034}
+  m_LocalRotation: {x: -0.023461487, y: -0.015572546, z: -0.00036550005, w: 0.9996034}
   m_LocalPosition: {x: 0.321, y: 1.586, z: -10.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -517,7 +523,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 409969890}
-  m_LocalRotation: {x: -0.023461508, y: -0.0155725805, z: -0.00036550115, w: 0.9996034}
+  m_LocalRotation: {x: -0.023461487, y: -0.015572546, z: -0.00036550005, w: 0.9996034}
   m_LocalPosition: {x: 0.321, y: 1.586, z: -10.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
