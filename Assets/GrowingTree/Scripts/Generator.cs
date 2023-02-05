@@ -217,7 +217,7 @@ public class Generator : MonoBehaviour {
 		{
 			float radSize = Random.Range(2f, 6f);
 			Vector3 cOffset = new Vector3(Random.Range(0f, 1.5f), Random.Range(5f, 10f), Random.Range(0f, 1.5f));
-			float randGrow = Random.Range(1f, 2f);
+			float randGrow = Random.Range(1.2f, 1.7f);
 
 			_radius = radSize;
 			crownOffset = cOffset;
