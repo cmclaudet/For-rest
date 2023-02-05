@@ -63,6 +63,7 @@ public class PlayerMove : MonoBehaviour {
 	{
 		if (rootGen != null)
 		{
+			rootGen.Stop();
 			rootGen.enabled = false;
 			rootGen = null;
 		}

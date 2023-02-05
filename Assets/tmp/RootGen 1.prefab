@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 4555286255674639334}
   - component: {fileID: 4555286255674639335}
   m_Layer: 0
-  m_Name: RootGen
+  m_Name: RootGen 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,28 +146,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 524c27571c0f2ec47b3d7d568d52c4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nbAttractors: 885
-  _radius: 34
+  _nbAttractors: 246
+  _radius: 18
   _addRadius: 5
-  _branchLength: 0.148
+  _branchLength: 0.311
   _timeBetweenIterations: 0
   _attractionRange: 3
   _killRange: 0.43
-  _randomGrowth: 0.157
+  _randomGrowth: 0.105
   _radialSubdivisions: 6
   _extremitiesSize: 0.03
   _invertGrowth: 1.18
   _attractors: []
   _activeAttractors: 
   IsGrowing: 0
-  extendedGrowth: 0
-  cutoff: 21
-  isRoot: 1
-  _childChance: 17
-  childTrees: []
-  childPrefab: {fileID: 4555286255674639336, guid: 8d8df40db0f054fe8ba7ff90cf3b6b63,
-    type: 3}
-  crownOffset: {x: 0, y: 0, z: 0}
 --- !u!23 &4555286255674639334
 MeshRenderer:
   m_ObjectHideFlags: 0

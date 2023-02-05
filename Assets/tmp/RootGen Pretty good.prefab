@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 4555286255674639334}
   - component: {fileID: 4555286255674639335}
   m_Layer: 0
-  m_Name: RootGen
+  m_Name: RootGen Pretty good
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,7 +153,7 @@ MonoBehaviour:
   _timeBetweenIterations: 0
   _attractionRange: 3
   _killRange: 0.43
-  _randomGrowth: 0.157
+  _randomGrowth: 0.105
   _radialSubdivisions: 6
   _extremitiesSize: 0.03
   _invertGrowth: 1.18
@@ -162,12 +162,6 @@ MonoBehaviour:
   IsGrowing: 0
   extendedGrowth: 0
   cutoff: 21
-  isRoot: 1
-  _childChance: 17
-  childTrees: []
-  childPrefab: {fileID: 4555286255674639336, guid: 8d8df40db0f054fe8ba7ff90cf3b6b63,
-    type: 3}
-  crownOffset: {x: 0, y: 0, z: 0}
 --- !u!23 &4555286255674639334
 MeshRenderer:
   m_ObjectHideFlags: 0

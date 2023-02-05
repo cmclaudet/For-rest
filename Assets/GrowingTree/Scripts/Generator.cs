@@ -46,7 +46,7 @@ public class Generator : MonoBehaviour {
     //[SerializeField]
     //private Transform entPos;
     public Vector3 _startPosition { get { return transform.position; } }//entPos.position; } } // = new Vector3(0, 0, 0);
-	[Range(0f, 0.5f)]
+	[Range(0f, 1f)]
 	public float _branchLength = 0.2f;
 	[Range(0f, 1f)]
 	public float _timeBetweenIterations = 0.5f;
@@ -89,9 +89,22 @@ public class Generator : MonoBehaviour {
 
 	public bool IsGrowing = false;
 	private float prevRad = 0f;
+	[SerializeField]
+	private bool extendedGrowth;
+	[SerializeField]
+	private int cutoff = 5;
+	[SerializeField]
+	private bool isRoot;
+    [SerializeField][Range(0f, 100f)]
+    private float _childChance = 5f;
+	[SerializeField]
+	private List<Generator> childTrees = new List<Generator>();
+	[SerializeField]
+	private GameObject childPrefab;
+	[SerializeField]
+	private Vector3 crownOffset;
 
-
-	void Awake () {
+    void Awake () {
 		// initilization 
 	}
 
@@ -115,9 +128,9 @@ public class Generator : MonoBehaviour {
 			);
 
 			// translation to match the parent position
-			pt+= transform.position;
+			pt+= transform.position + crownOffset;
 
-			_attractors.Add(pt);
+            _attractors.Add(pt);
 		}
 	}
 
@@ -163,8 +176,8 @@ public class Generator : MonoBehaviour {
                 radius * Mathf.Cos(alpha)
             );
 
-            // translation to match the parent position
-            pt += transform.position;
+			// translation to match the parent position
+			pt += transform.position;
 
             _attractors.Add(pt);
         }
@@ -196,7 +209,10 @@ public class Generator : MonoBehaviour {
 	public void GrowRoots()
 	{
 		cnbAttr = _nbAttractors;
-        GenerateAttractorCircle(_nbAttractors, _radius);
+		if (isRoot)
+			GenerateAttractorCircle(_nbAttractors, _radius);
+		else
+            GenerateAttractorSphere(_nbAttractors, _radius);
 
         _filter = GetComponent<MeshFilter>();
 
@@ -290,6 +306,14 @@ public class Generator : MonoBehaviour {
 								b._children.Add(nb);
 								newBranches.Add(nb);
 								_extremities.Add(nb);
+
+								//rarely add child tree
+								if ((_childChance / 100) >= Random.Range(0f, 100f) && isRoot)
+								{
+									Generator gen = Instantiate(childPrefab, b._end, transform.rotation, transform).GetComponent<Generator>();
+									childTrees.Add(gen);
+									gen.GrowRoots();
+								}
 							} else {
 								// if no attraction points, we only check if the branch is an extremity
 								if (b._children.Count == 0) {
@@ -326,13 +350,14 @@ public class Generator : MonoBehaviour {
 
 			ToMesh();
 
-			if (_attractors.Count < 4)
+			if (_attractors.Count < cutoff)
 			{
 				//IsGrowing = false;
 				_activeAttractors.Clear();
 				_attractors.Clear();
-				Debug.LogError("hi");
-				GenerateAttractorRing(cnbAttr);
+				//Debug.LogError("hi");
+				if (extendedGrowth)
+					GenerateAttractorRing(cnbAttr);
 			}
 		}
   }
@@ -436,6 +461,15 @@ public class Generator : MonoBehaviour {
 		_filter.mesh = treeMesh;
 	}
 
+    public void Stop()
+    {
+		foreach (var tree in childTrees)
+		{
+			tree.enabled = false;
+		}
+    }
+
+    /*
 	void OnDrawGizmos () {
 		/*
 		if (_attractors == null) {
@@ -453,7 +487,7 @@ public class Generator : MonoBehaviour {
 
 		Gizmos.color = new Color(0.4f, 0.4f, 0.4f, 0.4f);
 		Gizmos.DrawSphere(_extremities[0]._end, _attractionRange);
-		*/
+		*
 
 		// we draw the branches 
 		foreach (Branch b in _branches) {
@@ -464,4 +498,5 @@ public class Generator : MonoBehaviour {
 			Gizmos.DrawSphere(b._start, 0.05f);
 		}
 	}
+*/
 }

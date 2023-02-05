@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22929132, g: 0.2555781, b: 0.23823118, a: 1}
+  m_IndirectSpecularColor: {r: 0.22953068, g: 0.25581405, b: 0.2383851, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02e5ce40237840e6a5d75bfcb67a1ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 10
+  walkSpeed: 6
   sprite: {fileID: 827873148}
   animator: {fileID: 827873149}
   rootPrefab: {fileID: 4555286255674639336, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
