@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22953068, g: 0.25581405, b: 0.2383851, a: 1}
+  m_IndirectSpecularColor: {r: 0.22929132, g: 0.2555781, b: 0.23823118, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -230,7 +230,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 50730383c362e46e9ab22d7f51fde596, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.685
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -404,6 +404,7 @@ MonoBehaviour:
   wiggleTime: 3
   creakSounds:
   - {fileID: 8300000, guid: 6db365e51481142c79a3ccb6c614de4f, type: 3}
+  growRootsSound: {fileID: 8300000, guid: f1852beeabd4b40d3b58efefa95496f8, type: 3}
   breakSound: {fileID: 8300000, guid: 2cccffc6e1e124d60a15f6b9ffed5a6c, type: 3}
   footstepsSound: {fileID: 253641649}
   rootPrefab: {fileID: 4555286255674639336, guid: 4b674abfdfe1a4476b4cf22a4b518a06,
